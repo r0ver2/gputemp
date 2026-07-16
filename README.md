@@ -20,6 +20,8 @@ sudo ./gputemp                           # required to get junction temps
 sudo ./gputemp --watch --json            # e.g. pipe into a log/monitoring sidecar
 sudo ./gputemp --target 65c              # active fan control, target 65C (implies --watch)
 sudo ./gputemp --target 65c --min 30     # ...with a 30% floor when at/below target
+sudo ./gputemp --find 2                  # spin GPU 2's fan to 100%, all others to 0%,
+                                          # for 60s, to identify which physical slot it's in
 ```
 
 ### Active fan control (`--target`, `--min`)
@@ -49,6 +51,25 @@ the GPU* — this tool tries to fail toward more cooling, not less
 (unread temperature or the 95°C ceiling both force 100%), but it's still
 your responsibility to sanity-check the behavior on your specific
 hardware before relying on it unattended (e.g. a 24/7 mining rig).
+
+### Identifying a physical GPU (`--find`)
+
+On a rig with several identical-looking cards, `--find <ID>` sets that
+GPU's fan to 100% and every other detected GPU's fan to 0% for 60
+seconds, then restores automatic control — so you can watch which fan
+spins up and know which physical slot corresponds to which `ID` in the
+table.
+
+- Requires root, and an interactive `yes` confirmation before it touches
+  anything — **only do this while the GPUs are idle**. Running a fan at
+  0% on a card that's actively working (mining, rendering, etc.) can
+  cause it to overheat; this tool has no way to check load for you.
+- Validates `ID` against the actual number of detected GPUs (e.g. on a
+  single-GPU box, only `--find 0` is valid).
+- Implies **not** `--watch` — it's a one-shot diagnostic, not continuous
+  monitoring — and can't be combined with `--target`.
+- `Ctrl-C` during the 60-second wait restores automatic control
+  immediately rather than waiting out the full timer.
 
 Example table output:
 
