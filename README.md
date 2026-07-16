@@ -13,7 +13,37 @@ Supports temp, junc temp, ~~memory temp~~, fan speed, power usage/power limit.
 ./gputemp --watch --interval 5    # custom refresh interval
 sudo ./gputemp                    # required to get junction temps
 sudo ./gputemp --watch --json     # e.g. pipe into a log/monitoring sidecar
+sudo ./gputemp --target 65c              # active fan control, target 65C (implies --watch)
+sudo ./gputemp --target 65c --min 30     # ...with a 30% floor when at/below target
 ```
+
+### Active fan control (`--target`, `--min`)
+
+`--target TEMP` (e.g. `65` or `65c`) enables closed-loop fan control per
+GPU, aiming to hold core temperature near that value:
+
+- **At or below target**: fan is held at whatever speed it already had
+  when control started (its "baseline") — or at `--min`, if you gave one.
+  It is never forced lower than baseline without `--min` explicitly
+  saying so.
+- **Above target**: ramps linearly from that baseline up to 100% by
+  `target + 10°C`, then stays at 100% beyond that.
+- **Safety ceiling**: forces 100% regardless of the curve above 95°C
+  core temp, or if the temperature couldn't be read that cycle at all.
+- **On exit** (`Ctrl-C` or `SIGTERM`/`kill`): restores each GPU's
+  automatic fan control policy. **This does not happen on `SIGKILL`
+  (`kill -9`) or a crash** — if the process dies that way, fans stay at
+  whatever they were last set to until you either restart `gputemp` or
+  reboot/reload the driver.
+
+`--target` requires root and implies `--watch` (continuous control needs
+an ongoing loop, not a one-shot read). NVIDIA's own NVML documentation
+carries an explicit warning worth repeating here: *manually setting fan
+speed disengages the automatic curve, and setting it too low can damage
+the GPU* — this tool tries to fail toward more cooling, not less
+(unread temperature or the 95°C ceiling both force 100%), but it's still
+your responsibility to sanity-check the behavior on your specific
+hardware before relying on it unattended (e.g. a 24/7 mining rig).
 
 Example table output:
 
