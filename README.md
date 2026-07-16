@@ -7,12 +7,12 @@ Supports temp, junc temp, memory temp, fan speed, power usage/power limit.
 ## Usage
 
 ```
-./gputemp                         # one-shot table output
-./gputemp --json                  # one-shot JSON output
-./gputemp --watch                 # refresh every 2s until Ctrl-C
-./gputemp --watch --interval 5    # custom refresh interval
-sudo ./gputemp                    # required to get junction temps
-sudo ./gputemp --watch --json     # e.g. pipe into a log/monitoring sidecar
+./gputemp                                # one-shot table output
+./gputemp --json                         # one-shot JSON output
+./gputemp --watch                        # refresh every 2s until Ctrl-C
+./gputemp --watch --interval 5           # custom refresh interval
+sudo ./gputemp                           # required to get junction temps
+sudo ./gputemp --watch --json            # e.g. pipe into a log/monitoring sidecar
 sudo ./gputemp --target 65c              # active fan control, target 65C (implies --watch)
 sudo ./gputemp --target 65c --min 30     # ...with a 30% floor when at/below target
 ```
