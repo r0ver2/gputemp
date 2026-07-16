@@ -4,6 +4,11 @@ A small CLI for Ubuntu Server 22.04+ that lists NVIDIA GPUs with temperatures.
 
 Supports temp, junc temp, memory temp, fan speed, power usage/power limit.
 
+Supports:
+* Blackwell (50x0)
+* Ada Lovelace (40x0)
+* Ampere (30x0)
+
 ## Usage
 
 ```
