@@ -11,7 +11,7 @@ Supports temp, junc temp, memory temp, fan speed, power usage/power limit.
 ./gputemp --json                  # one-shot JSON output
 ./gputemp --watch                 # refresh every 2s until Ctrl-C
 ./gputemp --watch --interval 5    # custom refresh interval
-sudo ./gputemp                    # required to get junction temps on Blackwell GPUs
+sudo ./gputemp                    # required to get junction temps
 sudo ./gputemp --watch --json     # e.g. pipe into a log/monitoring sidecar
 ```
 
