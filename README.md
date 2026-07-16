@@ -7,7 +7,7 @@ Supports temp, junc temp (also for blackwells), memory temp, fan speed, power us
 ## Usage
 
 ```
-./gputemp                        # one-shot table output
+./gputemp                         # one-shot table output
 ./gputemp --json                  # one-shot JSON output
 ./gputemp --watch                 # refresh every 2s until Ctrl-C
 ./gputemp --watch --interval 5    # custom refresh interval
